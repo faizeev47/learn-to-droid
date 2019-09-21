@@ -1,2 +1,2 @@
-# Hey!
-The clean master branch of the repo!
+# Codelab 1.1
+Android Studio and Hello World
