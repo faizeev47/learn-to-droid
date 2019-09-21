@@ -1,2 +1,2 @@
 # Codelab 1.2
-The layout editor
+Part B: The layout editor
