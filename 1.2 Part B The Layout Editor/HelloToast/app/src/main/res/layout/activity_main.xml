@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#CCBEBE"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button_toast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#3D4779"
+        android:text="@string/button_label_toast"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:typeface="monospace"
+        android:onClick="showToast"/>
+
+    <TextView
+        android:id="@+id/show_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_below="@id/button_toast"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:background="#7986CB"
+        android:gravity="center"
+        android:text="@string/count_initial_value"
+        android:textSize="160sp"
+        android:textStyle="bold"
+        app:fontFamily="casual"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/button_count"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@id/show_count"
+        android:layout_centerHorizontal="true"
+        android:background="#3D4779"
+        android:text="@string/button_label_count"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:typeface="monospace"
+        android:onClick="countUp"/>
+</RelativeLayout>
