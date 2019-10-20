@@ -1,0 +1,4 @@
+#Mon Oct 21 00:15:04 PKT 2019
+base.0=C\:\\Users\\Faizan\\Desktop\\CS\\workspace\\learn-to-droid\\1.4 Learn to help yourself\\DarkTheme\\Application\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
