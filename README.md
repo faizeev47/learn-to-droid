@@ -1,2 +1,2 @@
-# Codelab 1.2
-Part B: The layout editor
+# Hey!
+The clean master branch of the repo!
