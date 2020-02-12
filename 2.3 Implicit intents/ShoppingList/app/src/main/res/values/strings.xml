@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Shopping List</string>
+    <string name="itemPlaceholder"></string>
+    <string name="btn_add_item">Add Item</string>
+    <string name="button_eggs">Eggs</string>
+    <string name="button_cheese">Cheese</string>
+    <string name="button_milk">Milk</string>
+    <string name="button_butter">Butter</string>
+    <string name="button_oil">Oil</string>
+    <string name="button_meat">Meat</string>
+    <string name="button_remove_item">Remove Item</string>
+    <string name="editText_store_hint">Search for store</string>
+    <string name="button_find_store">Find store</string>
+</resources>
