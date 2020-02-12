@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/listItem1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/listItem2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem3"
+        app:layout_constraintStart_toStartOf="@+id/listItem1"
+        app:layout_constraintTop_toBottomOf="@+id/listItem1" />
+
+    <TextView
+        android:id="@+id/listItem3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem4"
+        app:layout_constraintStart_toStartOf="@+id/listItem2"
+        app:layout_constraintTop_toBottomOf="@+id/listItem2" />
+
+    <TextView
+        android:id="@+id/listItem4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem5"
+        app:layout_constraintStart_toStartOf="@+id/listItem3"
+        app:layout_constraintTop_toBottomOf="@+id/listItem3" />
+
+    <TextView
+        android:id="@+id/listItem5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem6"
+        app:layout_constraintStart_toStartOf="@+id/listItem4"
+        app:layout_constraintTop_toBottomOf="@+id/listItem4" />
+
+    <TextView
+        android:id="@+id/listItem6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem7"
+        app:layout_constraintStart_toStartOf="@+id/listItem5"
+        app:layout_constraintTop_toBottomOf="@+id/listItem5" />
+
+    <TextView
+        android:id="@+id/listItem7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem8"
+        app:layout_constraintStart_toStartOf="@+id/listItem6"
+        app:layout_constraintTop_toBottomOf="@+id/listItem6" />
+
+    <TextView
+        android:id="@+id/listItem8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem9"
+        app:layout_constraintStart_toStartOf="@+id/listItem7"
+        app:layout_constraintTop_toBottomOf="@+id/listItem7" />
+
+    <TextView
+        android:id="@+id/listItem9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listItem10"
+        app:layout_constraintStart_toStartOf="@+id/listItem8"
+        app:layout_constraintTop_toBottomOf="@+id/listItem8" />
+
+    <TextView
+        android:id="@+id/listItem10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="@string/itemPlaceholder"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_add_item"
+        app:layout_constraintStart_toStartOf="@+id/listItem9"
+        app:layout_constraintTop_toBottomOf="@+id/listItem9" />
+
+    <Button
+        android:id="@+id/button_add_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:onClick="OpenItems"
+        android:text="@string/btn_add_item"
+        app:layout_constraintBottom_toTopOf="@+id/editText_store"
+        app:layout_constraintEnd_toStartOf="@+id/button_remove_item"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listItem10" />
+
+    <Button
+        android:id="@+id/button_find_store"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:onClick="FindStore"
+        android:text="@string/button_find_store"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editText_store"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editText_store" />
+
+    <EditText
+        android:id="@+id/editText_store"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:fontFamily="@font/product_sans_regular"
+        android:hint="@string/editText_store_hint"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_find_store"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_add_item" />
+
+    <Button
+        android:id="@+id/button_remove_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+        android:onClick="RemoveItem"
+        android:text="@string/button_remove_item"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_add_item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_add_item" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
