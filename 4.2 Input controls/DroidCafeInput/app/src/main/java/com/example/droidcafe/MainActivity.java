@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -91,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
         mOrderMessage = getString(R.string.froyo_order_message);
         displayToast(mOrderMessage);
     }
-
-
 
     public void displayToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
