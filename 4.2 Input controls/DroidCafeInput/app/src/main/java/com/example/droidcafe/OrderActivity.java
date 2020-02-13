@@ -16,6 +16,7 @@ public class OrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order);
         TextView textViewOrder = findViewById(R.id.textView_order);
         textViewOrder.setText("Order: " + getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
+        findViewById(R.id.nextday).performClick();
     }
 
     public void onRadioButtonClicked(View view) {
