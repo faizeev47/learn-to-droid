@@ -86,7 +86,7 @@
 
     <EditText
         android:id="@+id/editText_phone"
-        android:layout_width="wrap_content"
+        android:layout_width="171dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -123,8 +123,8 @@
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView_delivery">
@@ -150,5 +150,18 @@
             android:onClick="onRadioButtonClicked"
             android:text="@string/pick_up" />
     </RadioGroup>
+
+    <Spinner
+        android:id="@+id/spinner_phoneType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editText_phone"
+        app:layout_constraintTop_toBottomOf="@+id/editText_address" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
