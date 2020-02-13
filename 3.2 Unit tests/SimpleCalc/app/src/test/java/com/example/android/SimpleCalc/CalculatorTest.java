@@ -25,6 +25,7 @@ import org.junit.runners.JUnit4;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -53,6 +54,76 @@ public class CalculatorTest {
         assertThat(resultAdd, is(equalTo(2d)));
     }
 
+    /**
+     * Test for addition with a negative number
+     */
+    @Test
+    public void addTwoNumbersNegative() {
+        double resultAdd =  mCalculator.add(2d, -1d);
+        assertThat(resultAdd, is(equalTo(1d)));
+    }
 
+    /**
+     * Test for addition with a floating-point
+     */
+    @Test
+    public void addTwoNumbersFloats() {
+        double resultAdd = mCalculator.add(1.111f, 1.111d);
+        assertThat(resultAdd, is(closeTo(2.222, 0.001)));
+    }
+
+    /**
+     * Test for simple subtraction
+     */
+    @Test
+    public void subTwoNumbers() {
+        double resultSub = mCalculator.sub(2d, 1d);
+        assertThat(resultSub, is(equalTo(1d)));
+    }
+
+    /**
+     * Test for subtraction resulting in negative number
+     */
+    @Test
+    public void subWorksWithNegativeResults() {
+        double resultSub = mCalculator.sub(2d, 4d);
+        assertThat(resultSub, is(equalTo(-2d)));
+    }
+
+    /**
+     * Test for simple multiplication
+     */
+    @Test
+    public void mulTwoNumbers() {
+        double resultMul = mCalculator.mul(2d, 3d);
+        assertThat(resultMul, is(equalTo(6d)));
+    }
+
+    /**
+     * Test for multiplication by zero
+     */
+    @Test
+    public void mulTwoNumbersZero() {
+        double resultMul = mCalculator.mul(3d, 0d);
+        assertThat(resultMul, is(equalTo(0d)));
+    }
+
+    /**
+     * Test for simple division
+     */
+    @Test
+    public void divTwoNumbers() {
+        double resultDiv = mCalculator.div(9d, 3d);
+        assertThat(resultDiv, is(equalTo(3d)));
+    }
+
+    /**
+     * Test for division by zero
+     */
+    @Test
+    public void divTwoNumbersZero() {
+        double resultDiv = mCalculator.div(2d, 0);
+        assertThat(resultDiv, is(equalTo(Double.POSITIVE_INFINITY)));
+    }
 
 }
