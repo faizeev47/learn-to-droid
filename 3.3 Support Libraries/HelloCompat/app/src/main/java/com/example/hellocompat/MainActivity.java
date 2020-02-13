@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
@@ -44,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
         int colorResourceName = getResources().getIdentifier(colorSelected,
                                                     "color",
                                                             getApplicationContext().getOpPackageName());
-        int colorRes = ContextCompat.getColor(this, colorResourceName);
-        mHelloTextView.setTextColor(colorRes);
+//        int colorRes = ContextCompat.getColor(this, colorResourceName);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            int colorRes = getResources().getColor(colorResourceName, this.getTheme());
+            mHelloTextView.setTextColor(colorRes);
+        }
     }
 }
