@@ -2,6 +2,7 @@ package com.example.droidcafe;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -23,12 +25,20 @@ public class OrderActivity extends AppCompatActivity  implements AdapterView.OnI
     private String oOrderItem;
 
     private EditText oPickUpEditText;
+    private TextView oDateTextView;
+    private TextView oTimeTextView;
+    private Button oTimePickerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         TextView textViewOrder = findViewById(R.id.textView_order);
+        oDateTextView = findViewById(R.id.textView_date);
+        oTimeTextView = findViewById(R.id.textView_time);
+        oTimePickerButton = findViewById(R.id.button_picktime);
+        oTimePickerButton.setVisibility(Button.INVISIBLE);
+
         Intent intent = getIntent();
         oOrderItem = intent.getStringExtra(MainActivity.EXTRA_ITEM);
         textViewOrder.setText("Order: " + getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
@@ -70,21 +80,45 @@ public class OrderActivity extends AppCompatActivity  implements AdapterView.OnI
         if (checked) {
             switch (view.getId()) {
                 case R.id.sameday:
-                    displayToast(getString(R.string.same_day_messenger_service));
-                    oPickUpEditText.setVisibility(EditText.INVISIBLE);
-                    break;
                 case R.id.nextday:
-                    displayToast(getString(R.string.next_day_ground_delivery));
                     oPickUpEditText.setVisibility(EditText.INVISIBLE);
+                    oTimePickerButton.setVisibility(Button.INVISIBLE);
+                    break;
+                case R.id.specifydate:
+                    DialogFragment newFragment = new DatePickerFragment();
+                    newFragment.show(getSupportFragmentManager(), "datePicker");
+                    oTimePickerButton.setVisibility(Button.VISIBLE);
                     break;
                 case R.id.pickup:
-                    displayToast(getString(R.string.pick_up));
                     oPickUpEditText.setVisibility(EditText.VISIBLE);
+                    oTimePickerButton.setVisibility(Button.INVISIBLE);
                     break;
                 default:
                     break;
             }
         }
+    }
+
+    public void pickTime(View view) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public void processDatePickerResult(int year, int month, int day) {
+        String monthStr = Integer.toString(month + 1);
+        String dayStr = Integer.toString(day);
+        String yearStr = Integer.toString(year);
+
+        String message = (dayStr + "/" + monthStr + "/" + yearStr);
+        oDateTextView.setText("Delivery Date: " + message);
+    }
+
+    public void processTimePickerResult(int hour, int minute) {
+        String hourStr = String.format("%02d", hour);
+        String minuteStr = String.format("%02d", minute);
+
+        String message = hourStr + " : " + minuteStr;
+        oTimeTextView.setText("Delivery Time: " + message);
     }
 
     public void dialNumber(String number) {
