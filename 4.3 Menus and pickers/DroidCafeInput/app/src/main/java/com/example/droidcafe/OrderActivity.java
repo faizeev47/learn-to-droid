@@ -1,7 +1,9 @@
 package com.example.droidcafe;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class OrderActivity extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
+    private String oOrderItem;
 
     private EditText oPickUpEditText;
 
@@ -26,6 +29,8 @@ public class OrderActivity extends AppCompatActivity  implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         TextView textViewOrder = findViewById(R.id.textView_order);
+        Intent intent = getIntent();
+        oOrderItem = intent.getStringExtra(MainActivity.EXTRA_ITEM);
         textViewOrder.setText("Order: " + getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
 
         oPickUpEditText = findViewById(R.id.editText_pickup);
@@ -105,5 +110,26 @@ public class OrderActivity extends AppCompatActivity  implements AdapterView.OnI
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public void showAlert(View view) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(OrderActivity.this);
+        alertBuilder.setTitle("Confirmation");
+        alertBuilder.setMessage("Are you sure you want to place the order for a " + oOrderItem + "?");
+        alertBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        displayToast("The order is placed!");
+                    }
+                });
+        alertBuilder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        displayToast("The order is not placed.");
+                    }
+                });
+        alertBuilder.show();
     }
 }

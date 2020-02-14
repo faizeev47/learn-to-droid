@@ -20,12 +20,14 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.android.droidcafe.mainactivity.extra.MESSAGE";
+    public static final String EXTRA_ITEM = "com.example.android.droidcafe.mainactivity.extra.ITEM";
 
     private ImageView mDonutImageView;
     private ImageView mIcecreamImageView;
     private ImageView mFroyoImageView;
 
     private String mOrderMessage;
+    private String mOrderItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mOrderMessage = "";
+        mOrderItem = "";
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 if (mOrderMessage.length() > 0) {
                     Intent intent = new Intent(MainActivity.this, OrderActivity.class);
                     intent.putExtra(EXTRA_MESSAGE, mOrderMessage);
+                    intent.putExtra(EXTRA_ITEM, mOrderItem);
                     startActivity(intent);
                 }
                 else {
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 if (mOrderMessage.length() > 0) {
                     Intent intent = new Intent(MainActivity.this, OrderActivity.class);
                     intent.putExtra(EXTRA_MESSAGE, mOrderMessage);
+                    intent.putExtra(EXTRA_ITEM, mOrderItem);
                     startActivity(intent);
                 }
                 else {
@@ -124,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void showDonutOrder(View view) {
         mOrderMessage = getString(R.string.donut_order_message);
+        mOrderItem = getString(R.string.donut);
         displayToast(mOrderMessage);
     }
 
@@ -133,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void showIcecreamOrder(View view) {
         mOrderMessage = getString(R.string.ice_cream_order_message);
+        mOrderItem = getString(R.string.icecream);
         displayToast(mOrderMessage);
     }
 
@@ -142,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void showFroyoOrder(View view) {
         mOrderMessage = getString(R.string.froyo_order_message);
+        mOrderItem = getString(R.string.froyo);
         displayToast(mOrderMessage);
     }
 
