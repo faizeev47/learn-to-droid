@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Drawer Experiment</string>
+    <string name="navigation_header">Navigation Header</string>
+    <string name="drawer_heading">Hello Everybody!</string>
+    <string name="drawer_body">This is a drawer</string>
+    <string name="nav_action_home">Home</string>
+    <string name="nav_action_gallery">Gallery</string>
+    <string name="nav_action_settings">Settings</string>
+</resources>
