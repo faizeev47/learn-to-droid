@@ -9,13 +9,21 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.android.droidcafe.mainactivity.extra.MESSAGE";
+
+    private ImageView mDonutImageView;
+    private ImageView mIcecreamImageView;
+    private ImageView mFroyoImageView;
 
     private String mOrderMessage;
 
@@ -41,6 +49,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mDonutImageView = findViewById(R.id.donut);
+        mIcecreamImageView = findViewById(R.id.icecream);
+        mFroyoImageView = findViewById(R.id.froyo);
+
+        registerForContextMenu(mDonutImageView);
+        registerForContextMenu(mIcecreamImageView);
+        registerForContextMenu(mFroyoImageView);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v,  menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_help) {
+            displayToast("This here is a clickable picture of a food item");
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
