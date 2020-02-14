@@ -71,4 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void resetList(MenuItem item) {
+        mWordList.clear();
+        for (int i = 0; i < 20; i++) {
+            mWordList.addLast("Word " + i);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
 }
