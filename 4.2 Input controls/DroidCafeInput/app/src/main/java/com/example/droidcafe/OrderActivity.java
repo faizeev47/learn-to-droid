@@ -2,10 +2,16 @@ package com.example.droidcafe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -13,12 +19,31 @@ import android.widget.Toast;
 
 public class OrderActivity extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
 
+    private EditText oPickUpEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         TextView textViewOrder = findViewById(R.id.textView_order);
         textViewOrder.setText("Order: " + getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
+
+        oPickUpEditText = findViewById(R.id.editText_pickup);
+        if (oPickUpEditText != null) {
+            oPickUpEditText.setVisibility(EditText.INVISIBLE);
+            oPickUpEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    boolean handled = false;
+                    if (actionId == EditorInfo.IME_ACTION_SEND) {
+                        dialNumber(v.getText().toString());
+                        handled = true;
+                    }
+                    return handled;
+                }
+            });
+        }
+
         findViewById(R.id.nextday).performClick();
 
         Spinner spinner = findViewById(R.id.spinner_phoneType);
@@ -31,6 +56,8 @@ public class OrderActivity extends AppCompatActivity  implements AdapterView.OnI
             spinner.setOnItemSelectedListener(this);
         }
 
+
+
     }
 
     public void onRadioButtonClicked(View view) {
@@ -39,16 +66,30 @@ public class OrderActivity extends AppCompatActivity  implements AdapterView.OnI
             switch (view.getId()) {
                 case R.id.sameday:
                     displayToast(getString(R.string.same_day_messenger_service));
+                    oPickUpEditText.setVisibility(EditText.INVISIBLE);
                     break;
                 case R.id.nextday:
                     displayToast(getString(R.string.next_day_ground_delivery));
+                    oPickUpEditText.setVisibility(EditText.INVISIBLE);
                     break;
                 case R.id.pickup:
                     displayToast(getString(R.string.pick_up));
+                    oPickUpEditText.setVisibility(EditText.VISIBLE);
                     break;
                 default:
                     break;
             }
+        }
+    }
+
+    public void dialNumber(String number) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + number));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+        else {
+            Log.e("Implicit intents", "Cannot open the dialer!");
         }
     }
 
