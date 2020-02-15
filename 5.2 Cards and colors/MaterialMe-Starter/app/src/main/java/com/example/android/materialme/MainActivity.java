@@ -16,10 +16,13 @@
 
 package com.example.android.materialme;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +35,10 @@ import java.util.Collections;
  * Main Activity for the Material Me app, a mock sports news application with poor design choices
  */
 public class MainActivity extends AppCompatActivity {
+    public static final String STATE_SPORTS_TITLES = "com.example.android.materialme.SPORTS_TITLES";
+    public static final String STATE_SPORTS_INFOS = "com.example.android.materialme.SPORTS_INFOS";
+    public static final String STATE_SPORTS_IMAGE_RESOURCES = "com.example.android.materialme.SPORTS_IMAGE_RESOURCES";
+
 
     //Member variables
     private RecyclerView mRecyclerView;
@@ -57,7 +64,17 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         //Get the data
-        initializeData();
+        String[] sportsList = null;
+        String[] sportsInfo = null;
+        int[] sportsImageResource = null;
+        if (savedInstanceState != null) {
+            Intent intent = getIntent();
+            sportsList = intent.getStringArrayExtra(STATE_SPORTS_TITLES);
+            sportsInfo = intent.getStringArrayExtra(STATE_SPORTS_INFOS);
+            sportsImageResource = intent.getIntArrayExtra(STATE_SPORTS_IMAGE_RESOURCES);
+        }
+
+        initializeData(sportsList, sportsInfo, sportsImageResource);
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN,
@@ -84,23 +101,58 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method for initializing the sports data from resources.
      */
-    private void initializeData() {
+    private void initializeData(@Nullable String[] sportsList, @Nullable String[] sportsInfo, @Nullable int[] sportsImageResources) {
         //Get the resources from the XML file
-        String[] sportsList = getResources().getStringArray(R.array.sports_titles);
-        String[] sportsInfo = getResources().getStringArray(R.array.sports_info);
-        TypedArray sportsImageResources = getResources().obtainTypedArray(R.array.sports_images);
+        if (sportsList == null) {
+            sportsList = getResources().getStringArray(R.array.sports_titles);
+        }
+        if (sportsInfo == null) {
+            sportsInfo = getResources().getStringArray(R.array.sports_info);
+        }
+        int length = sportsList.length;
+        if (sportsImageResources == null) {
+            sportsImageResources = new int[length];
+            TypedArray sportsResources = getResources().obtainTypedArray(R.array.sports_images);
+            for (int i = 0; i < length; i++) {
+                sportsImageResources[i] = sportsResources.getResourceId(i, 0);
+            }
+            sportsResources.recycle();
+        }
 
         //Clear the existing data (to avoid duplication)
         mSportsData.clear();
 
         //Create the ArrayList of Sports objects with the titles and information about each sport
-        for(int i=0;i<sportsList.length;i++){
-            mSportsData.add(new Sport(sportsList[i], sportsInfo[i], sportsImageResources.getResourceId(i, 0)));
+        for (int i = 0; i < length; i++) {
+            mSportsData.add(new Sport(sportsList[i], sportsInfo[i], sportsImageResources[i]));
         }
 
-        sportsImageResources.recycle();
         //Notify the adapter of the change
         mAdapter.notifyDataSetChanged();
     }
 
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        int length = mSportsData.size();
+        String[] sportsList = new String[length];
+        String[] sportsInfo = new String[length];
+        int[] sportsImageResources = new int[length];
+
+        int i = 0;
+        for (Sport sport: mSportsData) {
+            sportsList[i] = sport.getTitle();
+            sportsInfo[i] = sport.getInfo();
+            sportsImageResources[i] = sport.getImageResource();
+        }
+
+        outState.putStringArray(STATE_SPORTS_TITLES, sportsList);
+        outState.putStringArray(STATE_SPORTS_INFOS, sportsInfo);
+        outState.putIntArray(STATE_SPORTS_IMAGE_RESOURCES, sportsImageResources);
+    }
+
+    public void resetSports(View view) {
+        initializeData(null, null, null);
+    }
 }
