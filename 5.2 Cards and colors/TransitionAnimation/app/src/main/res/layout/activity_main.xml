@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal">
+        <ImageButton
+            android:id="@+id/block1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_circle"
+            android:tint="@android:color/holo_red_light"
+            android:background="@android:color/transparent"
+            android:onClick="explode"/>
+
+        <ImageButton
+            android:id="@+id/block2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/block1"
+            android:layout_toEndOf="@+id/block1"
+            android:padding="8dp"
+            android:src="@drawable/ic_dash"
+            android:tint="@android:color/holo_blue_dark"
+            android:background="@android:color/transparent"
+            android:onClick="rotate"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal">
+        <ImageButton
+            android:id="@+id/block3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:src="@drawable/ic_android"
+            android:tint="@android:color/holo_green_light"
+            android:background="@android:color/transparent"
+            android:onClick="swap"
+            />
+        <ImageButton
+            android:id="@+id/block4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/block3"
+            android:layout_toEndOf="@+id/block3"
+            android:tint="@color/colorAccent"
+            android:padding="8dp"
+            android:src="@drawable/ic_android"
+            android:foreground="@color/yellow_600"
+            android:onClick="fade" />
+    </RelativeLayout>
+
+</LinearLayout>
