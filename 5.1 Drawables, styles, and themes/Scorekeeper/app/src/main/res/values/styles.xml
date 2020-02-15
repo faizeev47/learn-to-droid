@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
@@ -9,8 +9,8 @@
     </style>
 
     <style name="ScoreButtons">
-        <item name="android:tint">@color/colorPrimary</item>
-        <item name="android:background">@drawable/button_background</item>
+        <item name="android:tint">@drawable/button</item>
+        <item name="android:background">@drawable/button</item>
     </style>
 
     <style name="MinusButtons" parent="ScoreButtons">
