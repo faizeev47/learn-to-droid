@@ -18,6 +18,8 @@ package com.example.android.materialme;
 
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.ngamolsky.android.materialme.DetailActivity;
 
 import java.util.ArrayList;
 
@@ -86,7 +89,7 @@ class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder>  {
     /**
      * ViewHolder class that represents each row of data in the RecyclerView
      */
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
 
         //Member Variables for the TextViews
         private TextView mTitleText;
@@ -104,6 +107,7 @@ class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder>  {
             mTitleText = (TextView)itemView.findViewById(R.id.title);
             mInfoText = (TextView)itemView.findViewById(R.id.subTitle);
             mSportsImage = itemView.findViewById(R.id.sportsImage);
+            itemView.setOnClickListener(this);
         }
 
         void bindTo(Sport currentSport){
@@ -111,6 +115,17 @@ class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder>  {
             mTitleText.setText(currentSport.getTitle());
             mInfoText.setText(currentSport.getInfo());
             Glide.with(mContext).load(currentSport.getImageResource()).into(mSportsImage);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Sport currentSport = mSportsData.get(getAdapterPosition());
+            Intent intent = new Intent(mContext, DetailActivity.class);
+            intent.putExtra("title", currentSport.getTitle());
+            intent.putExtra("image_resources", currentSport.getImageResource());
+            mContext.startActivity(intent);
+
+
         }
     }
 }
