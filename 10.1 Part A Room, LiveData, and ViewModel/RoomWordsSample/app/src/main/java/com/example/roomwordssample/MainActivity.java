@@ -1,5 +1,7 @@
 package com.example.roomwordssample;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,10 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
+    private static final String LOG_TAG = MainActivity.class.getSimpleName() + "LOGGING";
     private WordViewModel mWordViewModel;
 
     @Override
@@ -47,10 +52,22 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, NewWordsActivity.class);
+                startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE &&
+        resultCode == RESULT_OK) {
+            Word word = new Word(data.getStringExtra(NewWordsActivity.EXTRA_REPLY));
+            mWordViewModel.insert(word);
+        } else {
+            Toast.makeText(this, getString(R.string.empty_not_saved), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
