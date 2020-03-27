@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Scorekeeper</string>
+    <string name="content_description_decrease">Decrease score</string>
+    <string name="score_0">00</string>
+    <string name="content_description_increase">Increase score</string>
+    <string name="team1_heading">Team 1</string>
+    <string name="team2_heading">Team 2</string>
+
+    <string name="night_mode">Night</string>
+    <string name="day_mode">Day</string>
+</resources>
