@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int NOTIFICATION_ID = 0;
 
     private static final String ACTION_UPDATE_NOTIFICATION = "com.example.android.notifyme.ACTION_UPDATE_NOTIFICATION";
+    private static final String ACTION_CANCEL_NOTIFICATION = "com.example.android.notifyme.ACTION_CANCEL_NOTIFICATION";
     private static final String LOG_TAG = MainActivity.class.getSimpleName() + "Logging: ";
 
     private NotificationManager mNotificationManager;
@@ -49,7 +50,10 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         updateUi(true, false, false);
 
-        registerReceiver(mReceiver, new IntentFilter(ACTION_UPDATE_NOTIFICATION));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_UPDATE_NOTIFICATION);
+        filter.addAction(ACTION_CANCEL_NOTIFICATION);
+        registerReceiver(mReceiver, filter);
     }
 
     public void createNotificationChannel() {
@@ -66,9 +70,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private NotificationCompat.Builder getNotificationBuilder() {
+
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(this,
                 NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent updateIntent = new Intent(ACTION_UPDATE_NOTIFICATION);
+        PendingIntent updatePendingIntent = PendingIntent.getBroadcast(this,
+                NOTIFICATION_ID, updateIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        Intent cancelIntent = new Intent(ACTION_CANCEL_NOTIFICATION);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(this,
+                NOTIFICATION_ID, cancelIntent, PendingIntent.FLAG_ONE_SHOT);
+
         return new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
                     .setContentTitle("You've been notified!")
                     .setContentText("This is your notification text")
@@ -76,16 +90,13 @@ public class MainActivity extends AppCompatActivity {
                     .setContentIntent(notificationPendingIntent)
                     .setAutoCancel(true)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setDefaults(NotificationCompat.DEFAULT_ALL);
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .addAction(R.drawable.ic_vector_update, "Update Notification", updatePendingIntent)
+                    .setDeleteIntent(cancelPendingIntent);
     }
 
     public void sendNotification(View view) {
-        Intent updateIntent = new Intent(ACTION_UPDATE_NOTIFICATION);
-        PendingIntent updatePendingIntent = PendingIntent.getBroadcast(this,
-                NOTIFICATION_ID, updateIntent, PendingIntent.FLAG_ONE_SHOT);
-
         mNotificationManager.notify(NOTIFICATION_ID, getNotificationBuilder()
-                .addAction(R.drawable.ic_vector_update, "Update Notification", updatePendingIntent)
                 .build());
         updateUi(false, true, true);
     }
@@ -119,8 +130,12 @@ public class MainActivity extends AppCompatActivity {
     public class NotificationReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LOG_TAG, "Gotten it!");
-            updateNotification();
+            String intentAction = intent.getAction();
+            if (intentAction == ACTION_UPDATE_NOTIFICATION) {
+                updateNotification();
+            } else if (intentAction == ACTION_CANCEL_NOTIFICATION) {
+                updateUi(true, false, false);
+            }
         }
     }
 
