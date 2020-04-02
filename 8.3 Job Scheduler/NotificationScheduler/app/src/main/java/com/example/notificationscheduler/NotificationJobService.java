@@ -7,6 +7,10 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.SystemClock;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -17,8 +21,14 @@ public class NotificationJobService extends JobService {
 
     NotificationManager mNotifyManager;
 
+    SleepTask sleepTask;
+    public static long taskProgress;
+
+    JobParameters jobParams;
+
     @Override
     public boolean onStartJob(JobParameters params) {
+        jobParams = params;
         createNotificationChannel();
         PendingIntent contentPendingIntent = PendingIntent.getActivity(
                 this,
@@ -33,11 +43,16 @@ public class NotificationJobService extends JobService {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         mNotifyManager.notify(NOTIFICATION_ID, builder.build());
+        sleepTask = new SleepTask();
+        sleepTask.execute();
         return false;
     }
 
     @Override
     public boolean onStopJob(JobParameters params) {
+        if (!sleepTask.completed) {
+            Toast.makeText(this, "Job not completed!", Toast.LENGTH_SHORT).show();
+        }
         return true;
     }
 
@@ -54,6 +69,44 @@ public class NotificationJobService extends JobService {
             notificationChannel.enableVibration(true);
             notificationChannel.setDescription("Notifications from job service");
             mNotifyManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    public class SleepTask extends AsyncTask<Void, Integer, Void> {
+
+        boolean completed;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            completed = false;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            taskProgress = values[0];
+            completed = false;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                for (int i = 1; i <= 5; i++) {
+                    Thread.sleep(i * 1000);
+                    publishProgress(i);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            completed = true;
+            jobFinished(jobParams, false);
         }
     }
 }

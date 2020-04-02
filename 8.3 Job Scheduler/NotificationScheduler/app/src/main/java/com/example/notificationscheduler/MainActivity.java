@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -105,8 +106,6 @@ public class MainActivity extends AppCompatActivity {
                 this,
                 toastMessage,
                 Toast.LENGTH_SHORT).show();
-
-
     }
 
     public void cancelJobs(View view) {
@@ -116,4 +115,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Jobs cancelled", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }
