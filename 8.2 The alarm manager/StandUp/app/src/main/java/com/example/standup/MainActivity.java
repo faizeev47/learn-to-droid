@@ -14,18 +14,26 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID =
             "primary_notification_channel";
 
+    public static final SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:MM");
+
     private NotificationManager mNotificationManager;
 
     private ToggleButton  mAlarmToggle;
+    private Button mCheckAlarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,23 @@ public class MainActivity extends AppCompatActivity {
                     alarmManager.cancel(notifyPendingIntent);
                 }
                 Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mCheckAlarm = findViewById(R.id.checkNextAlarm);
+        mCheckAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String toastMessage;
+                if (mAlarmToggle.isChecked()) {
+                    Date date = new Date(alarmManager.getNextAlarmClock().getTriggerTime());
+                    toastMessage = "The next alarm is " + dateFormatter.format(date);
+                } else {
+                    toastMessage = "No alarm is set";
+                }
+                Toast.makeText(MainActivity.this,
+                        toastMessage,
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
