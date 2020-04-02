@@ -3,14 +3,17 @@ package com.example.standup;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -31,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
         createNotifcationChannel();
 
+        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+        final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(this,
+                NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+
+        final long repeatInterval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        final long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
+
         mAlarmToggle = findViewById(R.id.alarmToggle);
         mAlarmToggle.setChecked(false);
         mAlarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -39,9 +51,13 @@ public class MainActivity extends AppCompatActivity {
                 String toastMessage;
                 if (isChecked) {
                     toastMessage = "Stand Up Alarm On!";
-                    deliverNotification(MainActivity.this);
+                    if (alarmManager != null) {
+                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+                                triggerTime, repeatInterval, notifyPendingIntent);
+                    }
                 } else {
                     toastMessage = "Stand Up Alarm Off!";
+                    alarmManager.cancel(notifyPendingIntent);
                 }
                 Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
             }
