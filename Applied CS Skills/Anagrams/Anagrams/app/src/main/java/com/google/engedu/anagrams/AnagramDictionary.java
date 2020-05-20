@@ -15,10 +15,14 @@
 
 package com.google.engedu.anagrams;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -27,13 +31,26 @@ public class AnagramDictionary {
     private static final int MIN_NUM_ANAGRAMS = 5;
     private static final int DEFAULT_WORD_LENGTH = 3;
     private static final int MAX_WORD_LENGTH = 7;
+    private static final String LOG_TAG = "Logging";
     private Random random = new Random();
+
+    private ArrayList<String> wordList = new ArrayList<>();
+    private HashSet<String> wordSet = new HashSet<>();
+    private HashMap<String, ArrayList<String>> lettersToWord = new HashMap<>();
 
     public AnagramDictionary(Reader reader) throws IOException {
         BufferedReader in = new BufferedReader(reader);
         String line;
         while((line = in.readLine()) != null) {
             String word = line.trim();
+            String sorted = sortLetters(word);
+            if (!lettersToWord.containsKey(sorted)) {
+                lettersToWord.put(sorted, new ArrayList<String>());
+                lettersToWord.get(sorted).add(word);
+            } else {
+                lettersToWord.get(sorted).add(word);
+            }
+            wordList.add(word);
         }
     }
 
@@ -42,8 +59,10 @@ public class AnagramDictionary {
     }
 
     public List<String> getAnagrams(String targetWord) {
-        ArrayList<String> result = new ArrayList<String>();
-        return result;
+        String sortedWord = sortLetters(targetWord);
+        return lettersToWord.containsKey(sortedWord) ?
+                lettersToWord.get(sortedWord) :
+                new ArrayList<String>();
     }
 
     public List<String> getAnagramsWithOneMoreLetter(String word) {
@@ -52,6 +71,39 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
+        Log.d(LOG_TAG, sortLetters("stop"));
         return "stop";
+    }
+
+    private String sortLetters(String word) {
+        char[] letters = word.toLowerCase().toCharArray();
+        return new String(quicksort(letters, 0, letters.length - 1));
+    }
+
+    private char[] quicksort(char[] array, int low, int high) {
+        if (low < high) {
+            int partition = partition(array, low, high);
+            quicksort(array, low, partition - 1);
+            quicksort(array, partition + 1, high);
+        }
+        return array;
+    }
+
+    private int partition(char[] array, int low, int high) {
+        int pivot = array[high];
+        char temp;
+        int j = low, i;
+        for (i = low; i <= high; i++) {
+            if (array[i] < pivot) {
+                temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+                j++;
+            }
+        }
+        temp = array[--i];
+        array[i] = array[j];
+        array[j] = temp;
+        return j;
     }
 }
