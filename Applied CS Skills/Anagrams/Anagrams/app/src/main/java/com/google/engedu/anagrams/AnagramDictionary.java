@@ -103,30 +103,65 @@ public class AnagramDictionary {
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
         String letters = sortLetters(word);
-        String newWord;
+        String newWord, newWordLetters;
         for (char c = 'a'; c <= 'z'; c++) {
-            newWord = sortLetters(letters + c);
-            if (lettersToWord.containsKey(newWord)) {
-                result.addAll(lettersToWord.get(newWord));
+            newWord = letters + c;
+            newWordLetters = sortLetters(newWord);
+            if (lettersToWord.containsKey(newWordLetters)) {
+                for (String anagram : lettersToWord.get(newWordLetters)) {
+                    if (isGoodWord(anagram, word) && !result.contains(anagram)) {
+                        result.add(anagram);
+                    }
+                }
             }
         }
         return result;
     }
 
-    public String pickGoodStarterWord() {
+    public List<String> getAnagramsWithTwoMoreLetters(String word) {
+        ArrayList<String> result = new ArrayList<String>();
+        String letters = sortLetters(word);
+        String newWord, newWordLetters;
+        for (char c = 'a'; c <= 'z'; c++) {
+            for (char d = 'a' ; d <= 'z'; d++) {
+                newWord = letters + c;
+                newWordLetters = sortLetters(newWord);
+                if (lettersToWord.containsKey(newWordLetters)) {
+                    for (String anagram : lettersToWord.get(newWordLetters)) {
+                        if (isGoodWord(anagram, word) && !result.contains(anagram)) {
+                            result.add(anagram);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public String pickGoodStarterWord(boolean isOneLetterMode) {
         ArrayList<String> words = sizeToWords.get(wordLength);
-        wordLength = ++wordLength % MAX_WORD_LENGTH;
         int totalWords = words.size();
         String goodWord;
         for (int i = random.nextInt(totalWords), j = 0; j < totalWords; i = ++i % totalWords, j++) {
             goodWord = words.get(i);
             String letters = sortLetters(goodWord);
-            if (lettersToWord.containsKey(letters)
-                    && getAnagramsWithOneMoreLetter(goodWord).size() >= MIN_NUM_ANAGRAMS) {
-                return goodWord;
+            int anagramCount;
+            if (isOneLetterMode) {
+                anagramCount = getAnagramsWithOneMoreLetter(goodWord).size();
+            } else {
+                anagramCount = getAnagramsWithTwoMoreLetters(goodWord).size();
+            }
+            if (lettersToWord.containsKey(letters)) {
+                if (anagramCount >= MIN_NUM_ANAGRAMS) {
+                    return goodWord;
+                } else {
+                    sizeToWords.get(wordLength).remove(goodWord);
+                    lettersToWord.get(letters).remove(goodWord);
+                }
             }
         }
-        return "NO WORD FOUND";
+        wordLength = ++wordLength % MAX_WORD_LENGTH;
+        return "stop";
     }
 
     private String sortLetters(String word) {

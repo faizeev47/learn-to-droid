@@ -30,7 +30,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ public class AnagramsActivity extends AppCompatActivity {
     private AnagramDictionary dictionary;
     private String currentWord;
     private List<String> anagrams;
+    private boolean isOneLetterMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,23 @@ public class AnagramsActivity extends AppCompatActivity {
                     handled = true;
                 }
                 return handled;
+            }
+        });
+
+
+        isOneLetterMode = true;
+        Switch modeSwitch = findViewById(R.id.letterModeSwitch);
+        final TextView letterMode = findViewById(R.id.letterMode);
+        modeSwitch.setChecked(false);
+        modeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                letterMode.setText(b ? "Two-Letter mode" : "One-Letter mode");
+                isOneLetterMode = !b;
+                if (currentWord != null) {
+                    currentWord = null;
+                    defaultAction();
+                }
             }
         });
     }
@@ -121,13 +141,21 @@ public class AnagramsActivity extends AppCompatActivity {
     }
 
     public boolean defaultAction(View view) {
+        return defaultAction();
+    }
+
+    public boolean defaultAction() {
         TextView gameStatus = (TextView) findViewById(R.id.gameStatusView);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         EditText editText = (EditText) findViewById(R.id.editText);
         TextView resultView = (TextView) findViewById(R.id.resultView);
         if (currentWord == null) {
-            currentWord = dictionary.pickGoodStarterWord();
-            anagrams = dictionary.getAnagramsWithOneMoreLetter(currentWord);
+            currentWord = dictionary.pickGoodStarterWord(isOneLetterMode);
+            if (isOneLetterMode) {
+                anagrams = dictionary.getAnagramsWithOneMoreLetter(currentWord);
+            } else {
+                anagrams = dictionary.getAnagramsWithTwoMoreLetters(currentWord);
+            }
             gameStatus.setText(Html.fromHtml(String.format(START_MESSAGE, currentWord.toUpperCase(), currentWord)));
             fab.setImageResource(android.R.drawable.ic_menu_help);
             fab.hide();
