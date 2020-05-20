@@ -43,19 +43,45 @@ public class AnagramDictionary {
         String line;
         while((line = in.readLine()) != null) {
             String word = line.trim();
-            String sorted = sortLetters(word);
-            if (!lettersToWord.containsKey(sorted)) {
-                lettersToWord.put(sorted, new ArrayList<String>());
-                lettersToWord.get(sorted).add(word);
+            String letters = sortLetters(word);
+            if (!lettersToWord.containsKey(letters)) {
+                lettersToWord.put(letters, new ArrayList<String>());
+                lettersToWord.get(letters).add(word);
             } else {
-                lettersToWord.get(sorted).add(word);
+                lettersToWord.get(letters).add(word);
             }
+            wordSet.add(word);
             wordList.add(word);
         }
     }
 
     public boolean isGoodWord(String word, String base) {
-        return true;
+        boolean containsSubstring = false;
+        char[] wordLetters = word.toCharArray(), baseLetters = base.toCharArray();
+        int baseLength = baseLetters.length, wordLength = wordLetters.length;
+        if (baseLength <= wordLength) {
+            char startingBaseLetter = baseLetters[0];
+            for (int i = 0; i < wordLength && !containsSubstring; i++) {
+                if (wordLetters[i] == startingBaseLetter && wordLength - (i + 1) >= baseLength) {
+                    containsSubstring = true;
+                    int j, nextStart = i;
+                    for (j = 1; j < baseLength && j + i < wordLength; j++) {
+                        if (wordLetters[i + j] == startingBaseLetter) {
+                            nextStart = i + j;
+                        }
+                        if (!(wordLetters[i + j] == baseLetters[j])) {
+                            containsSubstring = false;
+                            break;
+                        }
+                    }
+                    if (nextStart == i) {
+                        nextStart = i + j;
+                    }
+                    i = nextStart;
+                }
+            }
+        }
+        return wordSet.contains(word) && !containsSubstring;
     }
 
     public List<String> getAnagrams(String targetWord) {
@@ -67,12 +93,32 @@ public class AnagramDictionary {
 
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
+        String letters = sortLetters(word);
+        String newWord;
+        for (char c = 'a'; c <= 'z'; c++) {
+            newWord = sortLetters(letters + c);
+            if (lettersToWord.containsKey(newWord)) {
+                for (String anagaram : lettersToWord.get(newWord)) {
+                    Log.d(LOG_TAG, anagaram);
+                    result.add(anagaram);
+                }
+            }
+        }
         return result;
     }
 
     public String pickGoodStarterWord() {
-        Log.d(LOG_TAG, sortLetters("stop"));
-        return "stop";
+        int totalWords = wordList.size();
+        String goodWord;
+        for (int i = random.nextInt(totalWords), j = 0; j < totalWords; i = ++i % totalWords, j++) {
+            goodWord = wordList.get(i);
+            String letters = sortLetters(goodWord);
+            if (lettersToWord.containsKey(letters)
+                    && lettersToWord.get(letters).size() > MIN_NUM_ANAGRAMS) {
+                return goodWord;
+            }
+        }
+        return wordList.get(0);
     }
 
     private String sortLetters(String word) {
