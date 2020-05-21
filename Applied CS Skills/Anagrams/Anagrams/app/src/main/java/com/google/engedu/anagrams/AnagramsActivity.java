@@ -44,11 +44,15 @@ import java.util.List;
 
 public class AnagramsActivity extends AppCompatActivity {
 
-    public static final String START_MESSAGE = "Find as many words as possible that can be formed by adding one letter to <big>%s</big> (but that do not contain the substring %s).";
+    public static final String START_MESSAGE_ONE_LETTER = "Find as many words as possible that can be formed by adding one letter to <big>%s</big> (but that do not contain the substring %s).";
+    public static final String START_MESSAGE_TWO_LETTER = "Find as many words as possible that can be formed by adding two letters to <big>%s</big> (but that do not contain the substring %s).";
+
+
     private AnagramDictionary dictionary;
     private String currentWord;
     private List<String> anagrams;
     private boolean isOneLetterMode;
+    private String startMessage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,7 @@ public class AnagramsActivity extends AppCompatActivity {
             }
         });
 
-
+        startMessage = START_MESSAGE_ONE_LETTER;
         isOneLetterMode = true;
         Switch modeSwitch = findViewById(R.id.letterModeSwitch);
         final TextView letterMode = findViewById(R.id.letterMode);
@@ -89,7 +93,13 @@ public class AnagramsActivity extends AppCompatActivity {
         modeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                letterMode.setText(b ? "Two-Letter mode" : "One-Letter mode");
+                if (b) {
+                    letterMode.setText("Two-Letter mode");
+                    startMessage = START_MESSAGE_TWO_LETTER;
+                } else {
+                    letterMode.setText("One-Letter mode");
+                    startMessage = START_MESSAGE_ONE_LETTER;
+                }
                 isOneLetterMode = !b;
                 if (currentWord != null) {
                     currentWord = null;
@@ -156,7 +166,7 @@ public class AnagramsActivity extends AppCompatActivity {
             } else {
                 anagrams = dictionary.getAnagramsWithTwoMoreLetters(currentWord);
             }
-            gameStatus.setText(Html.fromHtml(String.format(START_MESSAGE, currentWord.toUpperCase(), currentWord)));
+            gameStatus.setText(Html.fromHtml(String.format(startMessage, currentWord.toUpperCase(), currentWord)));
             fab.setImageResource(android.R.drawable.ic_menu_help);
             fab.hide();
             resultView.setText("");
