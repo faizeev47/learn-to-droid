@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "Logging: ";
     private Random random = new Random();
-    private int currentFace;
 
     public int userTotalScore;
     public int userTurnScore;
@@ -26,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mDiceView;
     private TextView mUserScore;
     private TextView mComputerScore;
+    private TextView mTurn;
+    private TextView mTurnScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +34,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mDiceView = findViewById(R.id.diceView);
-        mDiceView.setImageDrawable(getRandomDieFace());
+        mDiceView.setImageDrawable(getResources().getDrawable(R.drawable.ic_dice_one));
 
         mUserScore = findViewById(R.id.user_score);
         mComputerScore = findViewById(R.id.computer_score);
+        mTurn = findViewById(R.id.turn);
+        mTurnScore = findViewById(R.id.turn_score);
 
         userTotalScore = 0;
         userTurnScore  = 0;
         computerTotalScore = 0;
         computerTurnScore = 0;
 
+        updateTotalScoreUI();
+        updateTurnUI(true);
+
+    }
+
+    private void updateTotalScoreUI() {
         mUserScore.setText(Integer.toString(userTotalScore));
         mComputerScore.setText(Integer.toString(computerTotalScore));
+    }
+
+    private void updateTurnUI(boolean isUserTurn) {
+        if (isUserTurn) {
+            mTurn.setText(getResources().getString(R.string.your_turn));
+            mTurn.setTextColor(getResources().getColor(R.color.user_color));
+            mTurnScore.setText(Integer.toString(userTurnScore));
+        } else {
+            mTurn.setText(getResources().getString(R.string.my_turn));
+            mTurn.setTextColor(getResources().getColor(R.color.computer_color));
+            mTurnScore.setText(Integer.toString(computerTurnScore));
+        }
     }
 
     public void roll(View view) {
@@ -72,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Drawable getRandomDieFace() {
         int choice = random.nextInt(6) + 1;
-        currentFace = choice;
         int drawableId = R.drawable.ic_dice_three;
         switch (choice) {
             case 1:
@@ -95,6 +115,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
         }
+
+        if (choice == 1) {
+            userTurnScore = 0;
+        } else {
+            userTurnScore += choice;
+        }
+        updateTurnUI(true);
+
         return getResources().getDrawable(drawableId);
     }
 
@@ -105,5 +133,15 @@ public class MainActivity extends AppCompatActivity {
         computerTurnScore = 0;
         mUserScore.setText(Integer.toString(userTotalScore));
         mComputerScore.setText(Integer.toString(computerTotalScore));
+        updateTurnUI(true);
+    }
+
+    public void hold(View view) {
+        userTotalScore += userTurnScore;
+        computerTotalScore += computerTurnScore;
+        updateTotalScoreUI();
+        userTurnScore = 0;
+        computerTurnScore = 0;
+        updateTurnUI(false);
     }
 }

@@ -7,4 +7,6 @@
     <string name="button_hold">Hold</string>
     <string name="button_reset">Reset</string>
     <string name="sample_score_2">3</string>
+    <string name="my_turn">My turn</string>
+    <string name="your_turn">Your turn</string>
 </resources>
