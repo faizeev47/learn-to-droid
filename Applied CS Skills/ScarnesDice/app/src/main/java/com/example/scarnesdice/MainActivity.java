@@ -18,8 +18,10 @@ public class MainActivity extends AppCompatActivity {
     private Random random = new Random();
     private int currentFace;
 
-    private int userTotalScore;
-    private int computerTotalScore;
+    public int userTotalScore;
+    public int userTurnScore;
+    public int computerTotalScore;
+    public int computerTurnScore;
 
     private ImageView mDiceView;
     private TextView mUserScore;
@@ -37,7 +39,10 @@ public class MainActivity extends AppCompatActivity {
         mComputerScore = findViewById(R.id.computer_score);
 
         userTotalScore = 0;
+        userTurnScore  = 0;
         computerTotalScore = 0;
+        computerTurnScore = 0;
+
         mUserScore.setText(Integer.toString(userTotalScore));
         mComputerScore.setText(Integer.toString(computerTotalScore));
     }
@@ -95,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void reset(View view) {
         userTotalScore = 0;
+        userTurnScore = 0;
         computerTotalScore = 0;
+        computerTurnScore = 0;
         mUserScore.setText(Integer.toString(userTotalScore));
         mComputerScore.setText(Integer.toString(computerTotalScore));
     }
