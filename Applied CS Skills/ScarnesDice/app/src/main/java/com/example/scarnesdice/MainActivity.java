@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,21 +18,26 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "Logging: ";
     private Random random = new Random();
 
+    public boolean isUserTurn;
     public int userTotalScore;
-    public int userTurnScore;
     public int computerTotalScore;
-    public int computerTurnScore;
+    public int turnScore;
 
     private ImageView mDiceView;
     private TextView mUserScore;
     private TextView mComputerScore;
     private TextView mTurn;
     private TextView mTurnScore;
+    private Button mRoll;
+    private Button mHold;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRoll = findViewById(R.id.btn_roll);
+        mHold = findViewById(R.id.btn_hold);
 
         mDiceView = findViewById(R.id.diceView);
         mDiceView.setImageDrawable(getResources().getDrawable(R.drawable.ic_dice_one));
@@ -42,12 +48,12 @@ public class MainActivity extends AppCompatActivity {
         mTurnScore = findViewById(R.id.turn_score);
 
         userTotalScore = 0;
-        userTurnScore  = 0;
         computerTotalScore = 0;
-        computerTurnScore = 0;
+        turnScore = 0;
 
+        isUserTurn = true;
+        updateTurnScoreUI();
         updateTotalScoreUI();
-        updateTurnUI(true);
 
     }
 
@@ -56,43 +62,27 @@ public class MainActivity extends AppCompatActivity {
         mComputerScore.setText(Integer.toString(computerTotalScore));
     }
 
-    private void updateTurnUI(boolean isUserTurn) {
+    private void updateTurnScoreUI() {
         if (isUserTurn) {
             mTurn.setText(getResources().getString(R.string.your_turn));
             mTurn.setTextColor(getResources().getColor(R.color.user_color));
-            mTurnScore.setText(Integer.toString(userTurnScore));
         } else {
             mTurn.setText(getResources().getString(R.string.my_turn));
             mTurn.setTextColor(getResources().getColor(R.color.computer_color));
-            mTurnScore.setText(Integer.toString(computerTurnScore));
         }
+        mTurnScore.setText(Integer.toString(turnScore));
+    }
+
+    private void updateButtonsUI() {
+        mRoll.setEnabled(isUserTurn);
+        mHold.setEnabled(isUserTurn);
     }
 
     public void roll(View view) {
-        final ObjectAnimator animator = ObjectAnimator.ofFloat(
-                mDiceView, View.ROTATION, 0f, 1800f);
-        animator.setDuration(1000);
-        animator.setRepeatCount(0);
-        animator.start();
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) { }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mDiceView.setImageDrawable(getRandomDieFace());
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) { }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) { }
-        });
+        userTurn();
     }
 
-    private Drawable getRandomDieFace() {
-        int choice = random.nextInt(6) + 1;
+    private Drawable getRandomDieFace(int choice) {
         int drawableId = R.drawable.ic_dice_three;
         switch (choice) {
             case 1:
@@ -115,33 +105,123 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
         }
-
-        if (choice == 1) {
-            userTurnScore = 0;
-        } else {
-            userTurnScore += choice;
-        }
-        updateTurnUI(true);
-
         return getResources().getDrawable(drawableId);
     }
 
     public void reset(View view) {
         userTotalScore = 0;
-        userTurnScore = 0;
         computerTotalScore = 0;
-        computerTurnScore = 0;
-        mUserScore.setText(Integer.toString(userTotalScore));
-        mComputerScore.setText(Integer.toString(computerTotalScore));
-        updateTurnUI(true);
+        turnScore = 0;
+        isUserTurn = true;
+
+        updateTotalScoreUI();
+        updateTurnScoreUI();
+        updateButtonsUI();
     }
 
     public void hold(View view) {
-        userTotalScore += userTurnScore;
-        computerTotalScore += computerTurnScore;
+        if (isUserTurn) {
+            userTotalScore += turnScore;
+        } else {
+            computerTotalScore += turnScore;
+        }
+
+        isUserTurn = false;
+        turnScore = 0;
+
         updateTotalScoreUI();
-        userTurnScore = 0;
-        computerTurnScore = 0;
-        updateTurnUI(false);
+        updateTurnScoreUI();
+        updateButtonsUI();
+        computerTurn();
+    }
+
+    private void userTurn() {
+        final ObjectAnimator animator = ObjectAnimator.ofFloat(
+                mDiceView, View.ROTATION, 0f, 1800f);
+        animator.setDuration(1000);
+        animator.setRepeatCount(0);
+        animator.start();
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) { }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                int choice = random.nextInt(6) + 1;
+                mDiceView.setImageDrawable(getRandomDieFace(choice));
+                if (choice == 1) {
+                    turnScore = 0;
+                    isUserTurn = false;
+                } else {
+                    turnScore += choice;
+                }
+
+                updateTurnScoreUI();
+
+                if (!isUserTurn) {
+                    userTotalScore += turnScore;
+                    turnScore = 0;
+                    updateTotalScoreUI();
+                    computerTurn();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) { }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) { }
+        });
+    }
+
+    private void computerTurn() {
+        final ObjectAnimator animator = ObjectAnimator.ofFloat(
+                mDiceView, View.ROTATION, 0f, 1800f);
+        animator.setDuration(1000);
+        animator.setRepeatCount(0);
+        animator.start();
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) { }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                int choice = random.nextInt(6) + 1;
+                mDiceView.setImageDrawable(getRandomDieFace(choice));
+                if (choice == 1) {
+                    turnScore = 0;
+                    isUserTurn = true;
+                } else {
+                    turnScore += choice;
+                }
+
+                updateTurnScoreUI();
+
+                if (isUserTurn) {
+                    computerTotalScore += turnScore;
+                    turnScore = 0;
+                    mRoll.setEnabled(true);
+                    mHold.setEnabled(true);
+                    updateTotalScoreUI();
+                } else {
+                    if (computerTotalScore + turnScore > userTotalScore) {
+                        computerTotalScore += turnScore;
+                        turnScore = 0;
+                        isUserTurn = true;
+                        updateTurnScoreUI();
+                        updateTotalScoreUI();
+                        updateButtonsUI();
+                    } else {
+                        animator.start();
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) { }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) { }
+        });
     }
 }
